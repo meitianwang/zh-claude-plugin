@@ -93,7 +93,7 @@ def _strip_existing(text: str) -> str:
     pattern = re.compile(
         r'(?P<wc>[A-Za-z_$][\w$]*)\.webContents\.on\("dom-ready",\(\)=>\{'
         r'(?P<body>[^{}]*);'
-        r'(?P=wc)\.executeJavaScript\((?:"(?:\\.|[^"\\])*")\)\.catch\(\(\)=>\{\}\)'
+        r'(?P=wc)(?:\.webContents)?\.executeJavaScript\((?:"(?:\\.|[^"\\])*")\)\.catch\(\(\)=>\{\}\)'
         r'\}\);' + re.escape(MARKER)
     )
     return pattern.sub(lambda m: f'{m.group("wc")}.webContents.on("dom-ready",()=>{{{m.group("body")}}})', text)
@@ -113,7 +113,7 @@ def apply(app: AppInfo, corpus: Corpus, lang: str = "zh-CN") -> None:
     wc, body = chosen.group("wc"), chosen.group("body")
     injection = (
         f'{wc}.webContents.on("dom-ready",()=>{{{body};'
-        f"{wc}.executeJavaScript({json.dumps(script)}).catch(()=>{{}})}});{MARKER}"
+        f"{wc}.webContents.executeJavaScript({json.dumps(script)}).catch(()=>{{}})}});{MARKER}"
     )
     patched = (text[: chosen.start()] + injection + text[chosen.end():]).encode("utf-8")
 
