@@ -27,6 +27,34 @@ cd zh-claude-plugin
 
 > 覆盖率说明：语料针对某个 Claude 版本校准。你的 Claude 若**不新于**该版本，基本 100% 中文；若**更新**，新增字符串会先显英文，运行 `./bin/claude-zh translate`（需本机有 `claude` CLI 或 API key）即可用 Claude 补满。
 
+## 首次安装：给终端授予「App 管理」权限（必做一次）
+
+如果安装时报 *“is owned by you, but macOS is blocking modifications”*，**这不是文件权限问题**，而是 macOS（Ventura 起）的「App 管理」隐私保护：任何进程要修改 `/Applications` 里的 App，都必须先获得该权限。给你运行命令用的那个终端授权即可，**不需要 sudo**。
+
+**第一步** — 打开 **系统设置 → 隐私与安全性**，往下找到 **「App 管理」**（App Management）点进去：
+
+```
+系统设置 (System Settings)
+└─ 隐私与安全性 (Privacy & Security)
+   └─ App 管理 (App Management)   ← 点这一项
+```
+
+**第二步** — 面板标题是「允许下面的应用程序更新或删除其他应用程序」。在列表里**打开你实际运行命令的那个终端的开关**：
+
+| 应用 | 开关 |
+|---|---|
+| Codex | 视情况 |
+| **iTerm**（或 Terminal / Warp） | **← 打开它** |
+| node | — |
+| Visual Studio Code | 视情况 |
+
+- 用 **iTerm** 就开 iTerm；用系统自带 **Terminal** 就开 Terminal；在 **VS Code** 内置终端跑就开 Visual Studio Code。
+- 列表里**没有**你的终端时：先跑一次安装（会被拒），它通常就会自动出现；或点列表下方的 `+` 手动添加。
+
+**第三步** — **完全退出该终端（Cmd+Q）再重新打开**（权限变更必须重启 App 才生效），然后重新运行 `./install.command` 或 `./bin/claude-zh install`。
+
+> 如果「App 管理」里加了仍不行，改用 **隐私与安全性 → 完全磁盘访问（Full Disk Access）** 把终端加进去，这个权限更大、必定可用。
+
 ## 安装
 
 要求：macOS、已安装 Claude Desktop、系统自带 `/usr/bin/python3`（Xcode Command Line Tools 即可）。
