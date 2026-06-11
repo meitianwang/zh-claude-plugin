@@ -1,0 +1,11 @@
+# Build/work scratch
+.work/
+*.pyc
+__pycache__/
+*.tmp
+
+# macOS
+.DS_Store
+
+# build-only English snapshot (provenance, not used at runtime)
+resources/_pheohu-en-snapshot/

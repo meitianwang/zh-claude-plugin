@@ -1,0 +1,38 @@
+cn-language-plugin — attribution and third-party notices
+=========================================================
+
+This project has two licensing layers.
+
+1. Patcher code — MIT License (see LICENSE)
+   Everything under src/, bin/, launchd/, and the *.command launchers.
+   The Electron asar binary-format handling (src/claude_zh/asar.py) is an
+   independent reimplementation from the public asar container format.
+
+2. Translation corpus — CC BY-NC-SA 4.0
+   The Simplified Chinese translation data:
+     - resources/corpus-zh-CN/ion-dist.json
+     - resources/corpus-zh-CN/desktop-shell.json
+     - resources/corpus-zh-CN/statsig.json
+     - resources/corpus-zh-CN/Localizable.strings
+     - resources/corpus-zh-CN/hardcoded-frontend.json
+
+   The seed for this corpus comes from:
+     Claude_zh-CN_LanguagePack ("人味版")
+     Author : Pheo Hu
+     Source : https://github.com/pheohu-42/Claude_zh-CN_LanguagePack
+     License: CC BY-NC-SA 4.0 (Attribution-NonCommercial-ShareAlike)
+
+   resources/corpus-zh-CN.ext.json contains additional strings translated by
+   Claude (Anthropic) to cover Claude Desktop versions newer than the seed
+   snapshot. As a derivative/extension of the seed corpus distributed alongside
+   it, this extension is released under the SAME license: CC BY-NC-SA 4.0.
+
+   Per CC BY-NC-SA 4.0, any redistribution of the corpus or derivatives must:
+     - give appropriate credit to Pheo Hu (above),
+     - be NON-COMMERCIAL,
+     - be shared under the same license.
+
+This is an UNOFFICIAL, community localization. It is not affiliated with,
+endorsed by, or supported by Anthropic. "Claude" and "Anthropic" are trademarks
+of Anthropic. Patching modifies a local copy of Claude.app and re-signs it with
+an ad-hoc signature; use at your own risk (see README.md → Risks).
