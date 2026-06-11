@@ -38,6 +38,8 @@ if [ ! -d "/Applications/Claude.app" ]; then
   done
   echo; bold "已检测到 Claude.app。"
 fi
+# Writability (incl. macOS "App Management" TCC) is diagnosed authoritatively by
+# `claude-zh install` itself, which prints exact fix steps — don't second-guess it here.
 if [ ! -w "/Applications/Claude.app/Contents" ]; then
   err "Claude.app 不可写(可能属于 root)。请把它拖到「应用程序」重装为你自己的账户,本工具不使用 sudo。"
   pause; exit 1

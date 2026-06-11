@@ -60,13 +60,32 @@ class AppInfo:
         return self.path / APP_ASAR
 
     def user_writable(self) -> bool:
-        """True when the current user can modify the bundle without sudo.
+        return self.writability()[0]
 
-        On a normal personal install /Applications/Claude.app is owned by the
-        installing user, so the whole sudo dance the community patchers perform
-        is unnecessary.
+    def writability(self) -> tuple[bool, str]:
+        """Probe whether we can actually modify the bundle, and classify why not.
+
+        os.access() is unreliable here: macOS gates modifying apps in /Applications
+        behind the "App Management" privacy control (TCC), which a plain Terminal
+        usually lacks even though the bundle is owned by the user. So we do a real
+        write probe and classify the failure:
+
+          ("ok", "")           -> writable
+          (False, "not-owner") -> bundle owned by another user/root; reinstall or chown
+          (False, "tcc")       -> owned by us but blocked; terminal needs App Management
         """
-        return os.access(self.path, os.W_OK) and os.access(self.path / CONTENTS, os.W_OK)
+        owned = True
+        try:
+            owned = self.path.stat().st_uid == os.getuid()
+        except OSError:
+            pass
+        probe = self.path / CONTENTS / ".zh_write_probe"
+        try:
+            probe.touch()
+            probe.unlink()
+            return True, ""
+        except OSError:
+            return False, ("tcc" if owned else "not-owner")
 
 
 def read_info_plist(app_path: Path) -> dict:

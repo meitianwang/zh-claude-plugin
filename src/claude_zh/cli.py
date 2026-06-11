@@ -68,12 +68,21 @@ def cmd_install(args: argparse.Namespace) -> int:
     log(f"Claude Desktop {app.version} at {app.path}")
     log(f"Mode: {'dry-run (app will not be replaced)' if args.dry_run else 'install'}")
 
-    if not args.dry_run and not app.user_writable():
-        raise SystemExit(
-            f"{app.path} is not writable by the current user. "
-            "If it is in /Applications and owned by root, reinstall it to ~/Applications "
-            "or chown it to your user — this tool does not use sudo."
-        )
+    if not args.dry_run:
+        ok, reason = app.writability()
+        if not ok and reason == "tcc":
+            raise SystemExit(
+                f"{app.path} is owned by you, but macOS is blocking modifications.\n"
+                "This is the 'App Management' privacy control, not a file-permission issue.\n"
+                "Fix: System Settings → Privacy & Security → App Management → enable your\n"
+                "terminal app (Terminal / iTerm / Warp). (Full Disk Access also works.)\n"
+                "Then FULLY quit and reopen the terminal and run this again."
+            )
+        if not ok:
+            raise SystemExit(
+                f"{app.path} is not owned by you (likely root). Reinstall Claude to "
+                "~/Applications or chown it to your user — this tool does not use sudo."
+            )
     appinfo.require_virtualization_entitlement(app.path)
 
     corpus = corpus_mod.load()
